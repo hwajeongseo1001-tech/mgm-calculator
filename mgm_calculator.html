@@ -616,6 +616,13 @@ body {
               <div class="helper-text" id="referralHelper">권유자에게 지급할 혜택금 (고객 할인금에서 차감됩니다)</div>
             </div>
           </div>
+          <div class="form-row">
+            <label class="form-label">총 반영 고객 할인금</label>
+            <div class="form-control">
+              <div class="readonly-display" style="color: var(--accent-blue); font-weight: 700;"><span id="appliedDiscountDisplay">0</span>원</div>
+              <div class="helper-text">고객 할인금 - 권유자 혜택금 = 실제 적용 할인금</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -850,7 +857,7 @@ var $openType, $modelSelect, $planSelect, $discountType, $referralBenefit, $plan
 var $retailPrice, $subsidy, $subsidyDesc, $finalPhonePrice, $totalInterest;
 var $monthlyPhone, $monthlyInterest, $monthlyPlanFee, $planDiscount, $discountDesc;
 var $monthlyPlanNet, $grandTotal, $breakdownPhone, $breakdownPlan;
-var $mgmDiscountDisplay, $referralHelper;
+var $mgmDiscountDisplay, $referralHelper, $appliedDiscountDisplay;
 
 // ============================================================
 // ADMIN: sold-out filter (GitHub API에서 로드)
@@ -1033,6 +1040,7 @@ function calculate() {
 
   // Display
   $mgmDiscountDisplay.textContent = fmt(mgmDiscount);
+  $appliedDiscountDisplay.textContent = fmt(effectiveDiscount);
 
   // 공통지원금 (KT 공식)
   var subsidyAmount = getSubsidy(openType, planName, modelCode);
@@ -1148,6 +1156,7 @@ function init() {
   $breakdownPhone = document.getElementById('breakdownPhone');
   $breakdownPlan = document.getElementById('breakdownPlan');
   $mgmDiscountDisplay = document.getElementById('mgmDiscountDisplay');
+  $appliedDiscountDisplay = document.getElementById('appliedDiscountDisplay');
   $referralHelper = document.getElementById('referralHelper');
 
   // 서버에서 품절 목록 로드 후 모델 채우기
