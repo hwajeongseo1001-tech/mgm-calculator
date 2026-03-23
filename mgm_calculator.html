@@ -853,16 +853,19 @@ var $monthlyPlanNet, $grandTotal, $breakdownPhone, $breakdownPlan;
 var $mgmDiscountDisplay, $referralHelper;
 
 // ============================================================
-// ADMIN: sold-out filter (jsonblob에서 로드)
+// ADMIN: sold-out filter (GitHub API에서 로드)
 // ============================================================
 var _soldOutCache = [];
-var BLOB_API = 'https://jsonblob.com/api/jsonBlob/019d198e-7911-786f-aa4d-b0b7803fb07d';
+var GH_CONFIG_API = 'https://api.github.com/repos/hwajeongseo1001-tech/mgm-calculator/contents/mgm_config.json';
 
 function loadSoldOutFromServer(callback) {
-  fetch(BLOB_API, { headers: { 'Accept': 'application/json' } })
+  fetch(GH_CONFIG_API, { headers: { 'Accept': 'application/vnd.github.v3+json' } })
     .then(function(r) { return r.json(); })
     .then(function(data) {
-      _soldOutCache = data.soldout || [];
+      try {
+        var content = JSON.parse(atob(data.content));
+        _soldOutCache = content.soldout || [];
+      } catch(e) { _soldOutCache = []; }
       if (callback) callback();
     })
     .catch(function() {
